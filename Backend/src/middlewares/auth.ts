@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { Types } from "mongoose";
 
 declare global {
   namespace Express {
     interface Request {
-      userId: string;
+      userId: Types.ObjectId;
     }
   }
 }

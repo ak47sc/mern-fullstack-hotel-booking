@@ -1,13 +1,13 @@
 import express from "express";
-import { register } from "../controller/userController";
-import { check } from "express-validator";
+import { register } from "../controller/users";
+import { body } from "express-validator";
 const router = express.Router();
 
 const validator = [
-  check("firstname", "Firstname is required").isString(),
-  check("lastname", "Lastname is required").isString(),
-  check("email", "Email is required").isEmail(),
-  check("password", "Password with 6 or more characters required").isLength({
+  body("firstname", "Firstname is required").isString(),
+  body("lastname", "Lastname is required").isString(),
+  body("email", "Email is required").isEmail(),
+  body("password", "Password with 6 or more characters required").isLength({
     min: 6,
   }),
 ];

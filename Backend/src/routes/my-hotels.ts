@@ -29,6 +29,6 @@ const validators = [
     .isArray()
     .withMessage("facilities should be an array"),
 ];
-router.route("/").post(validators, upload.array("imagefiles", 6), addHotels);
+router.route("/").post(validators, upload.array("imageFiles", 6), addHotels);
 
 export default router;

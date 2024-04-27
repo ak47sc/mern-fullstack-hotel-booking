@@ -14,7 +14,6 @@ export const addHotels = async (req: Request, res: Response) => {
     const res = await cloudinary.v2.uploader.upload(dataURI);
     return res.url;
   });
-
   const imageUrls = await Promise.all(uploadPromises);
 
   newHotel.imageUrls = imageUrls;
@@ -24,5 +23,5 @@ export const addHotels = async (req: Request, res: Response) => {
 
   await hotel.save();
 
-  res.status(StatusCodes.CREATED).json({ data: hotel });
+  return res.status(StatusCodes.CREATED).json({ data: hotel });
 };

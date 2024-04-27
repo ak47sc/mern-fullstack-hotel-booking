@@ -26,7 +26,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, "../../Frontend/dist")));
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/hotels", verifyToken, hotelRoutes);
+app.use("/api/v1/my-hotels", verifyToken, hotelRoutes);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

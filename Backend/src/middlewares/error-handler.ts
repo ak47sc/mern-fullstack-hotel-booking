@@ -8,6 +8,7 @@ const errorHandlerMiddleWare = (
   res: Response,
   next: NextFunction
 ) => {
+  console.log(err);
   if (err instanceof CustomError) {
     const { statusCode, message } = err;
 

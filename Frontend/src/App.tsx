@@ -3,11 +3,9 @@ import Layout from "./layouts/layout";
 import Register from "./pages/Register";
 import SignIn from "./pages/SignIn";
 import HotelRegister from "./pages/HotelRegister";
-import { useAppContext } from "./contexts/AppContext";
 import ProtectedRoute from "./layouts/ProtectedRoute";
 
 function App() {
-  const { isLoggedIn } = useAppContext();
   return (
     <BrowserRouter>
       <Routes>

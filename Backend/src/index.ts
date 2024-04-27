@@ -29,7 +29,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/my-hotels", verifyToken, hotelRoutes);
 
 app.get("*", (req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
+  res.sendFile(path.join(__dirname, "../../Frontend/dist/index.html"));
 });
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

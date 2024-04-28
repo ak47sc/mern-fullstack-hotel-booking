@@ -1,5 +1,5 @@
 import express from "express";
-import { addHotels } from "../controller/my-hotels";
+import { addHotels, getAllHotels } from "../controller/my-hotels";
 import multer from "multer";
 import { body } from "express-validator";
 
@@ -29,6 +29,9 @@ const validators = [
     .isArray()
     .withMessage("facilities should be an array"),
 ];
-router.route("/").post(validators, upload.array("imageFiles", 6), addHotels);
+router
+  .route("/")
+  .post(validators, upload.array("imageFiles", 6), addHotels)
+  .get(getAllHotels);
 
 export default router;

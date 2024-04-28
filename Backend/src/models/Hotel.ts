@@ -14,6 +14,7 @@ export type HotelType = {
   pricePerNight: number;
   starRating: number;
   imageUrls: string[];
+  type: string;
 };
 const hotelSchema = new mongoose.Schema<HotelType>(
   {
@@ -35,6 +36,10 @@ const hotelSchema = new mongoose.Schema<HotelType>(
       required: true,
     },
     description: {
+      type: String,
+      required: true,
+    },
+    type: {
       type: String,
       required: true,
     },

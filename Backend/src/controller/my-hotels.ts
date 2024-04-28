@@ -25,3 +25,12 @@ export const addHotels = async (req: Request, res: Response) => {
 
   return res.status(StatusCodes.CREATED).json({ data: hotel });
 };
+
+export const getAllHotels = async (req: Request, res: Response) => {
+  const hotels = await Hotel.find({ userId: req.userId });
+
+  if (!hotels) {
+    return res.status(StatusCodes.OK).json({ message: "No hotels found" });
+  }
+  return res.status(StatusCodes.OK).json(hotels);
+};

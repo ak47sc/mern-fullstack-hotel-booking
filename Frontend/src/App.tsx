@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import SignIn from "./pages/SignIn";
 import HotelRegister from "./pages/HotelRegister";
 import ProtectedRoute from "./layouts/ProtectedRoute";
+import MyHotels from "./pages/MyHotels";
 
 function App() {
   return (
@@ -27,7 +28,16 @@ function App() {
             </Layout>
           }
         />
-
+        <Route
+          path="/my-hotels"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <MyHotels />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/new-hotel"
           element={

@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import cloudinary from "cloudinary";
-import Hotel, { HotelType } from "../models/Hotel";
+import Hotel from "../models/Hotel";
 import { Types } from "mongoose";
 import { StatusCodes } from "http-status-codes";
+import { HotelType } from "../shared/types";
 
 export const addHotels = async (req: Request, res: Response) => {
   const imagefiles = req.files as Express.Multer.File[];

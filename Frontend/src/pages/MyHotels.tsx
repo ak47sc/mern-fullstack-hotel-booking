@@ -1,12 +1,11 @@
-import { useMutation, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import * as apiClient from "../api-client";
 import { BsBuilding, BsMap } from "react-icons/bs";
-import { BiDollar, BiHotel, BiMoney, BiStar } from "react-icons/bi";
-import { spawn } from "child_process";
+import { BiHotel, BiMoney, BiStar } from "react-icons/bi";
 
 export const MyHotels = () => {
-  const { data: HotelData, isLoading } = useQuery(
+  const { data: HotelData } = useQuery(
     "fetchAllHotels",
     apiClient.getAllMyHotel,
     {
@@ -15,21 +14,6 @@ export const MyHotels = () => {
       },
     }
   );
-  /*
-  if (!HotelData || HotelData.length === 0) {
-    return (
-      <div>
-        No Bookings Found{" "}
-        <Link
-          className="bg-blue-600 text-white p-2 font-semibold rounded text-xl hover:bg-blue-500"
-          to={"/new-hotel"}
-        >
-          Add Hotel
-        </Link>
-      </div>
-    );
-  }
-  */
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
@@ -49,6 +33,7 @@ export const MyHotels = () => {
             return (
               <div
                 key={hotel._id}
+                id={hotel._id}
                 className="flex flex-col gap-4 rounded-md p-4 border border-gray-400"
               >
                 <h2 className="text-xl font-bold">{hotel.name}</h2>
@@ -64,7 +49,7 @@ export const MyHotels = () => {
                   </span>
                   <span className="border border-gray-400 p-2 flex items-center gap-2">
                     <BiMoney />
-                    {hotel.pricePerNight}
+                    {`${hotel.pricePerNight}/night`}
                   </span>
                   <span className="border border-gray-400 p-2 flex items-center gap-2">
                     <BiHotel />

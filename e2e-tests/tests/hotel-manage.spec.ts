@@ -46,3 +46,41 @@ test("should allow user to add a hotel", async ({ page }) => {
   await page.getByRole("button", { name: "Save" }).click();
   await expect(page.getByText("Hotel Registered!")).toBeVisible();
 });
+
+test("should display hotels", async ({ page }) => {
+  await page.goto(`${UI_URL}my-hotels`);
+  await expect(
+    page
+      .locator("[id='662f5dda556caa913952ae5c']")
+      .getByRole("heading", { name: "Test Hotel" })
+  ).toBeVisible();
+  await expect(
+    page
+      .locator("[id='662f5dda556caa913952ae5c']")
+      .getByText("This is a description for the Test Hotel")
+  ).toBeVisible();
+  await expect(
+    page
+      .locator("[id='662f5dda556caa913952ae5c']")
+      .getByText("Test City, Test Country")
+  ).toBeVisible();
+  await expect(
+    page.locator("[id='662f5dda556caa913952ae5c']").getByText("Luxury")
+  ).toBeVisible();
+  await expect(
+    page.locator("[id='662f5dda556caa913952ae5c']").getByText("100/night")
+  ).toBeVisible();
+  await expect(
+    page
+      .locator("[id='662f5dda556caa913952ae5c']")
+      .getByText("2 adults, 2 Children")
+  ).toBeVisible();
+  await expect(
+    page.locator("[id='662f5dda556caa913952ae5c']").getByText("3 Star Rating")
+  ).toBeVisible();
+
+  await expect(
+    page.getByRole("link", { name: "View Details" }).first()
+  ).toBeVisible();
+  await expect(page.getByRole("link", { name: "Add Hotel" })).toBeVisible();
+});

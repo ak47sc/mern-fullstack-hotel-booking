@@ -5,7 +5,7 @@ import { HotelType } from "../shared/types";
 const hotelSchema = new mongoose.Schema<HotelType>(
   {
     userId: {
-      type: String,
+      type: mongoose.Schema.ObjectId,
       ref: user,
       required: true,
     },

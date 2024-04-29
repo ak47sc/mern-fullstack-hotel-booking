@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import cloudinary from "cloudinary";
 import Hotel from "../models/Hotel";
-import { Types } from "mongoose";
+import mongoose from "mongoose";
 import { StatusCodes } from "http-status-codes";
 import { HotelType } from "../shared/types";
 
@@ -18,7 +18,7 @@ export const addHotels = async (req: Request, res: Response) => {
   const imageUrls = await Promise.all(uploadPromises);
 
   newHotel.imageUrls = imageUrls;
-  newHotel.userId = req.userId as string;
+  newHotel.userId = req.userId;
 
   const hotel = new Hotel(newHotel);
 
@@ -28,7 +28,9 @@ export const addHotels = async (req: Request, res: Response) => {
 };
 
 export const getAllHotels = async (req: Request, res: Response) => {
-  const hotels = await Hotel.find({ userId: req.userId });
+  const hotels = await Hotel.find({
+    userId: req.userId,
+  });
 
   if (!hotels) {
     return res.status(StatusCodes.OK).json({ message: "No hotels found" });

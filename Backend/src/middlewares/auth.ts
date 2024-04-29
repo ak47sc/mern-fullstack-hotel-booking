@@ -6,7 +6,7 @@ import mongoose, { Types } from "mongoose";
 declare global {
   namespace Express {
     interface Request {
-      userId: mongoose.Types.ObjectId;
+      userId: string;
     }
   }
 }

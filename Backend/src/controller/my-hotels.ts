@@ -18,7 +18,7 @@ export const addHotels = async (req: Request, res: Response) => {
   const imageUrls = await Promise.all(uploadPromises);
 
   newHotel.imageUrls = imageUrls;
-  newHotel.userId = req.userId;
+  newHotel.userId = req.userId as unknown as string;
 
   const hotel = new Hotel(newHotel);
 

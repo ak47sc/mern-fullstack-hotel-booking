@@ -5,6 +5,7 @@ import SignIn from "./pages/SignIn";
 import HotelRegister from "./pages/HotelRegister";
 import ProtectedRoute from "./layouts/ProtectedRoute";
 import MyHotels from "./pages/MyHotels";
+import { EditHotel } from "./pages/EditHotel";
 
 function App() {
   return (
@@ -44,6 +45,16 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <HotelRegister />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-hotel/:id"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <EditHotel />
               </Layout>
             </ProtectedRoute>
           }

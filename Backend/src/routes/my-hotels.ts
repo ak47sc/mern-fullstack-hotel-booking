@@ -1,5 +1,10 @@
 import express from "express";
-import { addHotels, getAllHotels } from "../controller/my-hotels";
+import {
+  addHotels,
+  getAllHotels,
+  getSingleHotel,
+  updateHotel,
+} from "../controller/my-hotels";
 import multer from "multer";
 import { body } from "express-validator";
 
@@ -33,5 +38,15 @@ router
   .route("/")
   .post(validators, upload.array("imageFiles", 6), addHotels)
   .get(getAllHotels);
+/*
+router
+  .route("/:id")
+  .get(getSingleHotel)
+  .patch(validators, upload.array("imageFiles", 6), updateHotel);
+*/
 
+router
+  .route("/:id")
+  .get(getSingleHotel)
+  .patch(validators, upload.none(), updateHotel);
 export default router;

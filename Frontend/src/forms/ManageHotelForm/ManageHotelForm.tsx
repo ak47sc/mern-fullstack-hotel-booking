@@ -4,6 +4,8 @@ import HotelTypesSection from "./HotelTypesSection";
 import HotelFacilitiesSection from "./HotelFacilitiesSection";
 import HotelGuestsSection from "./HotelGuestsSection";
 import HotelImageUploadSection from "./HotelImageUploadSection";
+import { HotelType } from "../../../../Backend/src/shared/types";
+import { useEffect } from "react";
 
 export type HotelFormData = {
   name: string;
@@ -16,18 +18,28 @@ export type HotelFormData = {
   facilities: string[];
   pricePerNight: number;
   starRating: number;
-  imageUrls: FileList;
+  imageFiles: File[];
+  imageUrls: string[];
 };
 
 type props = {
+  hotel?: HotelType;
   onSave: (hotelFormData: FormData) => void;
   isLoading: boolean;
 };
-const ManageHotelForm = ({ isLoading, onSave }: props) => {
+const ManageHotelForm = ({ isLoading, onSave, hotel }: props) => {
   const formMethods = useForm<HotelFormData>();
+  const { reset, handleSubmit } = formMethods;
 
-  const onSubmit = formMethods.handleSubmit((data: HotelFormData, e) => {
+  useEffect(() => {
+    reset(hotel);
+  }, [hotel, reset]);
+
+  const onSubmit = handleSubmit((data: HotelFormData) => {
     const formData = new FormData();
+    if (hotel) {
+      formData.append("_id", hotel._id);
+    }
     formData.append("name", data.name);
     formData.append("city", data.city);
     formData.append("country", data.country);
@@ -42,17 +54,26 @@ const ManageHotelForm = ({ isLoading, onSave }: props) => {
       formData.append(`facilities[${idx}]`, facility);
     });
 
-    Array.from(data.imageUrls).forEach((image) => {
+    if (data.imageUrls) {
+      data.imageUrls.forEach((image, index) => {
+        formData.append(`imageUrls[${index}]`, image);
+      });
+    }
+    /*
+    Array.from(data.imageFiles).forEach((image) => {
       formData.append("imageFiles", image);
-    });
+    });*/
 
     onSave(formData);
-    e?.target.reset();
   });
 
   return (
     <FormProvider {...formMethods}>
-      <form className="flex flex-col gap-4" onSubmit={onSubmit}>
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={onSubmit}
+        encType="multipart/formdata"
+      >
         <HotelDetailsSection />
         <HotelTypesSection />
         <HotelFacilitiesSection />

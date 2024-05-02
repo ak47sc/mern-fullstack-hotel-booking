@@ -62,7 +62,7 @@ export const MyHotels = () => {
                 </div>
                 <Link
                   className="bg-blue-600 text-white p-2 font-semibold rounded text-xl self-end hover:bg-blue-500"
-                  to={"/new-hotel"}
+                  to={`/edit-hotel/${hotel._id}`}
                 >
                   View Details
                 </Link>

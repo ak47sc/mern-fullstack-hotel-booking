@@ -1,21 +1,15 @@
 import { Request, Response } from "express";
 import cloudinary from "cloudinary";
 import Hotel from "../models/Hotel";
-import mongoose from "mongoose";
 import { StatusCodes } from "http-status-codes";
 import { HotelType } from "../shared/types";
 
 export const addHotels = async (req: Request, res: Response) => {
-  const imagefiles = req.files as Express.Multer.File[];
+  //const imagefiles = req.files as Express.Multer.File[];
+  //const imageFiles = req.body.imageUrls;
   const newHotel: HotelType = req.body;
 
-  const uploadPromises = imagefiles.map(async (image) => {
-    const base64 = Buffer.from(image.buffer).toString("base64");
-    let dataURI = "data:" + image.mimetype + ";base64," + base64;
-    const res = await cloudinary.v2.uploader.upload(dataURI);
-    return res.url;
-  });
-  const imageUrls = await Promise.all(uploadPromises);
+  const imageUrls = await uploadImagesToCloud(newHotel.imageUrls);
 
   newHotel.imageUrls = imageUrls;
   newHotel.userId = req.userId as unknown as string;
@@ -37,3 +31,57 @@ export const getAllHotels = async (req: Request, res: Response) => {
   }
   return res.status(StatusCodes.OK).json(hotels);
 };
+
+export const getSingleHotel = async (req: Request, res: Response) => {
+  const hotel = await Hotel.findOne({ _id: req.params.id, userId: req.userId });
+  if (!hotel) {
+    return res.status(StatusCodes.OK).json({ message: "No hotel found" });
+  }
+  return res.status(StatusCodes.OK).json(hotel);
+};
+
+export const updateHotel = async (req: Request, res: Response) => {
+  const hotel = await Hotel.findOne({ _id: req.params.id, userId: req.userId });
+  if (!hotel) {
+    return res.status(StatusCodes.OK).json({ message: "No hotel found" });
+  }
+
+  hotel.imageUrls.forEach(async (url) => {
+    const public_id = url.split("/").pop()?.split(".")[0];
+    const res = await cloudinary.v2.uploader.destroy(public_id as string);
+  });
+
+  const updatedHotelData: HotelType = req.body;
+
+  //const newImageFiles = req.files as Express.Multer.File[];
+  const newImageUrls = await uploadImagesToCloud(updatedHotelData.imageUrls);
+
+  updatedHotelData.imageUrls = newImageUrls;
+
+  const newHotel = await Hotel.findOneAndUpdate(
+    { _id: req.params.id, userId: req.userId },
+    updatedHotelData,
+    { runValidators: true, new: true }
+  );
+
+  if (!hotel) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: "Could not update Hotel,Please Try again later" });
+  }
+  return res.status(StatusCodes.OK).json(newHotel);
+};
+
+async function uploadImagesToCloud(imagefiles: string[]) {
+  const uploadPromises = imagefiles.map(async (image) => {
+    //const base64 = Buffer.from(image.buffer).toString("base64");
+    //let dataURI = "data:" + image.mimetype + ";base64," + base64;
+
+    //const res = await cloudinary.v2.uploader.upload(dataURI);
+    const res = await cloudinary.v2.uploader.upload(image);
+
+    return res.url;
+  });
+  const imageUrls = await Promise.all(uploadPromises);
+  return imageUrls;
+}

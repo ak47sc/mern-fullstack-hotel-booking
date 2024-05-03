@@ -1,7 +1,7 @@
 import { useFormContext } from "react-hook-form";
 import { HotelFormData } from "./ManageHotelForm";
-import React, { useRef } from "react";
-import { BsPlus, BsPlusCircleFill } from "react-icons/bs";
+import React from "react";
+import { BsPlusCircleFill } from "react-icons/bs";
 
 export const HotelImageUploadSection = () => {
   const {

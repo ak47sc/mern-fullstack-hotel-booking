@@ -35,7 +35,7 @@ const ManageHotelForm = ({ isLoading, onSave, hotel }: props) => {
     reset(hotel);
   }, [hotel, reset]);
 
-  const onSubmit = handleSubmit((data: HotelFormData) => {
+  const onSubmit = handleSubmit(async (data: HotelFormData) => {
     const formData = new FormData();
     if (hotel) {
       formData.append("_id", hotel._id);
@@ -54,26 +54,28 @@ const ManageHotelForm = ({ isLoading, onSave, hotel }: props) => {
       formData.append(`facilities[${idx}]`, facility);
     });
 
-    if (data.imageUrls) {
-      data.imageUrls.forEach((image, index) => {
-        formData.append(`imageUrls[${index}]`, image);
-      });
-    }
-    /*
-    Array.from(data.imageFiles).forEach((image) => {
-      formData.append("imageFiles", image);
-    });*/
+    const newImagesBlobpromises = data.imageUrls.map(async (url) => {
+      const res = await fetch(url);
+      return res.blob();
+    });
+
+    const newImagesBlobArray = await Promise.all(newImagesBlobpromises);
+
+    newImagesBlobArray.forEach((blob, idx) =>
+      formData.append(
+        "imageUrls",
+        new File([blob], `${idx}`, { type: blob.type })
+      )
+    );
 
     onSave(formData);
+    formMethods.watch("imageUrls").forEach((url) => URL.revokeObjectURL(url));
+    reset();
   });
 
   return (
     <FormProvider {...formMethods}>
-      <form
-        className="flex flex-col gap-4"
-        onSubmit={onSubmit}
-        encType="multipart/formdata"
-      >
+      <form className="flex flex-col gap-4" onSubmit={onSubmit}>
         <HotelDetailsSection />
         <HotelTypesSection />
         <HotelFacilitiesSection />

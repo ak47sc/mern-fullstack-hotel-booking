@@ -5,11 +5,11 @@ import { StatusCodes } from "http-status-codes";
 import { HotelType } from "../shared/types";
 
 export const addHotels = async (req: Request, res: Response) => {
-  //const imagefiles = req.files as Express.Multer.File[];
-  //const imageFiles = req.body.imageUrls;
+  const imagefiles = req.files as Express.Multer.File[];
+  console.log(imagefiles);
   const newHotel: HotelType = req.body;
 
-  const imageUrls = await uploadImagesToCloud(newHotel.imageUrls);
+  const imageUrls = await uploadImagesToCloud(imagefiles);
 
   newHotel.imageUrls = imageUrls;
   newHotel.userId = req.userId as unknown as string;
@@ -53,8 +53,8 @@ export const updateHotel = async (req: Request, res: Response) => {
 
   const updatedHotelData: HotelType = req.body;
 
-  //const newImageFiles = req.files as Express.Multer.File[];
-  const newImageUrls = await uploadImagesToCloud(updatedHotelData.imageUrls);
+  const newImageFiles = req.files as Express.Multer.File[];
+  const newImageUrls = await uploadImagesToCloud(newImageFiles);
 
   updatedHotelData.imageUrls = newImageUrls;
 
@@ -72,13 +72,12 @@ export const updateHotel = async (req: Request, res: Response) => {
   return res.status(StatusCodes.OK).json(newHotel);
 };
 
-async function uploadImagesToCloud(imagefiles: string[]) {
+async function uploadImagesToCloud(imagefiles: Express.Multer.File[]) {
   const uploadPromises = imagefiles.map(async (image) => {
-    //const base64 = Buffer.from(image.buffer).toString("base64");
-    //let dataURI = "data:" + image.mimetype + ";base64," + base64;
+    const base64 = Buffer.from(image.buffer).toString("base64");
+    let dataURI = "data:" + image.mimetype + ";base64," + base64;
 
-    //const res = await cloudinary.v2.uploader.upload(dataURI);
-    const res = await cloudinary.v2.uploader.upload(image);
+    const res = await cloudinary.v2.uploader.upload(dataURI);
 
     return res.url;
   });

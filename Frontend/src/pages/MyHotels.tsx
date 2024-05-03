@@ -5,7 +5,7 @@ import { BsBuilding, BsMap } from "react-icons/bs";
 import { BiHotel, BiMoney, BiStar } from "react-icons/bi";
 
 export const MyHotels = () => {
-  const { data: HotelData } = useQuery(
+  const { data: HotelData, isLoading } = useQuery(
     "fetchAllHotels",
     apiClient.getAllMyHotel,
     {
@@ -25,50 +25,67 @@ export const MyHotels = () => {
           Add Hotel
         </Link>
       </div>
-      {!HotelData || HotelData.length === 0 ? (
-        <span>No Hotels Found</span>
+      {isLoading ? (
+        <div className="min-h-52 flex flex-col gap-4 rounded-md p-4 border border-gray-400">
+          <span className="min-h-10 w-32 bg-gray-400 rounded-xl animate-pulse"></span>
+          <span className="min-h-5 bg-gray-400 rounded-xl animate-pulse"></span>
+          <span className="min-h-5 bg-gray-400 rounded-xl animate-pulse"></span>
+          <span className="min-h-5 bg-gray-400 rounded-xl animate-pulse"></span>
+          <div className="flex flex-col lg:flex-row gap-2">
+            <span className="w-52 h-16 p-2 bg-gray-300 flex items-center gap-2 animate-pulse"></span>
+            <span className="w-52 h-16 p-2 bg-gray-300 flex items-center gap-2 animate-pulse"></span>
+            <span className="w-52 h-16 p-2 bg-gray-300 flex items-center gap-2 animate-pulse"></span>
+            <span className="w-52 h-16 p-2 bg-gray-300 flex items-center gap-2 animate-pulse"></span>
+            <span className="w-52 h-16 p-2 bg-gray-300 flex items-center gap-2 animate-pulse"></span>
+          </div>
+          <span className="w-52 h-16 bg-gray-400 p-2 rounded self-end animate-pulse"></span>
+        </div>
       ) : (
         <div className="flex flex-col gap-4">
-          {HotelData.map((hotel) => {
-            return (
-              <div
-                key={hotel._id}
-                id={hotel._id}
-                className="flex flex-col gap-4 rounded-md p-4 border border-gray-400"
-              >
-                <h2 className="text-xl font-bold">{hotel.name}</h2>
-                <span>{hotel.description}</span>
-                <div className="flex flex-col lg:flex-row gap-2">
-                  <span className="border border-gray-400 p-2 flex items-center gap-2">
-                    <BsMap />
-                    {`${hotel.city}, ${hotel.country}`}
-                  </span>
-                  <span className="border border-gray-400 p-2 flex items-center gap-2">
-                    <BsBuilding />
-                    {hotel.type}
-                  </span>
-                  <span className="border border-gray-400 p-2 flex items-center gap-2">
-                    <BiMoney />
-                    {`${hotel.pricePerNight}/night`}
-                  </span>
-                  <span className="border border-gray-400 p-2 flex items-center gap-2">
-                    <BiHotel />
-                    {`${hotel.adultCount} adults, ${hotel.childCount} Children`}
-                  </span>
-                  <span className="border border-gray-400 p-2 flex items-center gap-2">
-                    <BiStar />
-                    {`${hotel.starRating} Star Rating`}
-                  </span>
-                </div>
-                <Link
-                  className="bg-blue-600 text-white p-2 font-semibold rounded text-xl self-end hover:bg-blue-500"
-                  to={`/edit-hotel/${hotel._id}`}
+          {!HotelData || HotelData?.length == 0 ? (
+            <span>No Hotels Found</span>
+          ) : (
+            HotelData?.map((hotel) => {
+              return (
+                <div
+                  key={hotel._id}
+                  id={hotel._id}
+                  className="flex flex-col gap-4 rounded-md p-4 border border-gray-400"
                 >
-                  View Details
-                </Link>
-              </div>
-            );
-          })}
+                  <h2 className="text-xl font-bold">{hotel.name}</h2>
+                  <span>{hotel.description}</span>
+                  <div className="flex flex-col lg:flex-row gap-2">
+                    <span className="border border-gray-400 p-2 flex items-center gap-2">
+                      <BsMap />
+                      {`${hotel.city}, ${hotel.country}`}
+                    </span>
+                    <span className="border border-gray-400 p-2 flex items-center gap-2">
+                      <BsBuilding />
+                      {hotel.type}
+                    </span>
+                    <span className="border border-gray-400 p-2 flex items-center gap-2">
+                      <BiMoney />
+                      {`${hotel.pricePerNight}/night`}
+                    </span>
+                    <span className="border border-gray-400 p-2 flex items-center gap-2">
+                      <BiHotel />
+                      {`${hotel.adultCount} adults, ${hotel.childCount} Children`}
+                    </span>
+                    <span className="border border-gray-400 p-2 flex items-center gap-2">
+                      <BiStar />
+                      {`${hotel.starRating} Star Rating`}
+                    </span>
+                  </div>
+                  <Link
+                    className="bg-blue-600 text-white p-2 font-semibold rounded text-xl self-end hover:bg-blue-500"
+                    to={`/edit-hotel/${hotel._id}`}
+                  >
+                    View Details
+                  </Link>
+                </div>
+              );
+            })
+          )}
         </div>
       )}
     </div>

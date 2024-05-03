@@ -36,17 +36,11 @@ const validators = [
 ];
 router
   .route("/")
-  .post(validators, upload.array("imageFiles", 6), addHotels)
+  .post(validators, upload.array("imageUrls", 6), addHotels)
   .get(getAllHotels);
-/*
-router
-  .route("/:id")
-  .get(getSingleHotel)
-  .patch(validators, upload.array("imageFiles", 6), updateHotel);
-*/
 
 router
   .route("/:id")
   .get(getSingleHotel)
-  .patch(validators, upload.none(), updateHotel);
+  .patch(validators, upload.array("imageUrls", 6), updateHotel);
 export default router;
